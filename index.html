@@ -1,68 +1,59 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة المطاردة</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        h1 {
-            color: #333;
-        }
-        .form-container {
-            margin-top: 20px;
-        }
-        input[type="text"], button {
-            padding: 10px;
-            margin: 5px;
-            font-size: 16px;
-        }
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لعبة المطاردة</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    .image-upload {
+      margin: 20px;
+    }
+    input[type="text"] {
+      padding: 5px;
+      width: 200px;
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
 </head>
 <body>
-    <h1>مرحبًا بك في لعبة المطاردة</h1>
-    <div class="form-container">
-        <h2>إضافة صور الشخصيات</h2>
-        <form id="character-form">
-            <label for="criminal">رابط صورة المجرم:</label>
-            <input type="text" id="criminal" placeholder="أدخل رابط الصورة" required><br>
-            <label for="policeman">رابط صورة الشرطي:</label>
-            <input type="text" id="policeman" placeholder="أدخل رابط الصورة" required><br>
-            <button type="submit">حفظ الصور</button>
-        </form>
-    </div>
-    <button onclick="startGame()">بدء اللعبة</button>
+  <h1>لعبة المطاردة بين المجرم والشرطي</h1>
+  <div class="image-upload">
+    <label for="criminal-image">رابط صورة المجرم:</label>
+    <input type="text" id="criminal-image" placeholder="أدخل رابط صورة المجرم">
+  </div>
+  <div class="image-upload">
+    <label for="policeman-image">رابط صورة الشرطي:</label>
+    <input type="text" id="policeman-image" placeholder="أدخل رابط صورة الشرطي">
+  </div>
+  <button id="start-game">ابدأ اللعبة</button>
 
-    <script>
-        // حفظ روابط الصور في التخزين المحلي
-        document.getElementById("character-form").addEventListener("submit", function (e) {
-            e.preventDefault();
-            const criminalImg = document.getElementById("criminal").value;
-            const policemanImg = document.getElementById("policeman").value;
-            localStorage.setItem("criminalImg", criminalImg);
-            localStorage.setItem("policemanImg", policemanImg);
-            alert("تم حفظ الصور بنجاح!");
-        });
+  <script>
+    document.getElementById("start-game").addEventListener("click", function() {
+      const criminalImg = document.getElementById("criminal-image").value;
+      const policemanImg = document.getElementById("policeman-image").value;
 
-        // بدء اللعبة
-        function startGame() {
-            window.location.href = "game.html";
-        }
-    </script>
+      if (criminalImg && policemanImg) {
+        localStorage.setItem("criminalImg", criminalImg);
+        localStorage.setItem("policemanImg", policemanImg);
+        window.location.href = "game.html";  // الانتقال إلى صفحة اللعبة
+      } else {
+        alert("يرجى إدخال رابط صور المجرم والشرطي.");
+      }
+    });
+  </script>
 </body>
 </html>
