@@ -3,30 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>لعبة المطاردة</title>
+  <title>لعبة الجري</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="game-container">
-    <!-- صفحة البداية -->
-    <div id="start-screen">
-      <h1>لعبة المطاردة</h1>
-      <div class="upload-section">
-        <h3>شخصيات اللاعب:</h3>
-        <input type="file" id="player-image-input">
-        <button id="add-player-image">إضافة</button>
-        <h3>شخصيات الشرطي:</h3>
-        <input type="file" id="police-image-input">
-        <button id="add-police-image">إضافة</button>
-      </div>
-      <button id="start-game-btn">بدء اللعبة</button>
-    </div>
-
-    <!-- شاشة اللعبة -->
-    <div id="game-screen" class="hidden">
-      <canvas id="game-canvas"></canvas>
-      <button id="restart-game-btn" class="hidden">إعادة تشغيل</button>
-    </div>
+  <div id="game">
+    <img id="player" src="player.png" alt="اللاعب">
+    <div id="obstacle">💩</div>
+    <div id="score">النقاط: 0</div>
+    <button id="start-btn">ابدأ اللعبة</button>
   </div>
   <script src="script.js"></script>
 </body>
