@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة المطاردة</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>لعبة المطاردة</h1>
+        <div class="upload-section">
+            <label for="criminal-img">رابط صورة المجرم:</label>
+            <input type="text" id="criminal-img" placeholder="أدخل رابط الصورة هنا">
+            
+            <label for="policeman-img">رابط صورة الشرطي:</label>
+            <input type="text" id="policeman-img" placeholder="أدخل رابط الصورة هنا">
+            
+            <button id="add-images">إضافة الصور</button>
+        </div>
+
+        <div class="actions">
+            <button id="view-criminals">عرض شخصيات المجرم</button>
+            <button id="view-policemen">عرض شخصيات الشرطي</button>
+            <button id="start-game">بدء اللعبة</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("add-images").addEventListener("click", () => {
+            const criminalImg = document.getElementById("criminal-img").value;
+            const policemanImg = document.getElementById("policeman-img").value;
+
+            if (criminalImg && policemanImg) {
+                localStorage.setItem("criminalImg", criminalImg);
+                localStorage.setItem("policemanImg", policemanImg);
+                alert("تم إضافة الصور بنجاح!");
+            } else {
+                alert("يرجى إدخال روابط الصور لكل من المجرم والشرطي.");
+            }
+        });
+
+        document.getElementById("view-criminals").addEventListener("click", () => {
+            const criminalImg = localStorage.getItem("criminalImg");
+            if (criminalImg) {
+                window.open(criminalImg, "_blank");
+            } else {
+                alert("لم يتم إضافة شخصية المجرم بعد.");
+            }
+        });
+
+        document.getElementById("view-policemen").addEventListener("click", () => {
+            const policemanImg = localStorage.getItem("policemanImg");
+            if (policemanImg) {
+                window.open(policemanImg, "_blank");
+            } else {
+                alert("لم يتم إضافة شخصية الشرطي بعد.");
+            }
+        });
+
+        document.getElementById("start-game").addEventListener("click", () => {
+            window.location.href = "game.html";
+        });
+    </script>
+</body>
+</html>
