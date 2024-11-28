@@ -1,59 +1,33 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>لعبة المطاردة</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-    }
-    .image-upload {
-      margin: 20px;
-    }
-    input[type="text"] {
-      padding: 5px;
-      width: 200px;
-    }
-    button {
-      padding: 10px 20px;
-      margin-top: 10px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>لعبة المطاردة بين المجرم والشرطي</h1>
-  <div class="image-upload">
-    <label for="criminal-image">رابط صورة المجرم:</label>
-    <input type="text" id="criminal-image" placeholder="أدخل رابط صورة المجرم">
-  </div>
-  <div class="image-upload">
-    <label for="policeman-image">رابط صورة الشرطي:</label>
-    <input type="text" id="policeman-image" placeholder="أدخل رابط صورة الشرطي">
-  </div>
-  <button id="start-game">ابدأ اللعبة</button>
+  <div class="game-container">
+    <!-- صفحة البداية -->
+    <div id="start-screen">
+      <h1>لعبة المطاردة</h1>
+      <div class="upload-section">
+        <h3>شخصيات اللاعب:</h3>
+        <input type="file" id="player-image-input">
+        <button id="add-player-image">إضافة</button>
+        <h3>شخصيات الشرطي:</h3>
+        <input type="file" id="police-image-input">
+        <button id="add-police-image">إضافة</button>
+      </div>
+      <button id="start-game-btn">بدء اللعبة</button>
+    </div>
 
-  <script>
-    document.getElementById("start-game").addEventListener("click", function() {
-      const criminalImg = document.getElementById("criminal-image").value;
-      const policemanImg = document.getElementById("policeman-image").value;
-
-      if (criminalImg && policemanImg) {
-        localStorage.setItem("criminalImg", criminalImg);
-        localStorage.setItem("policemanImg", policemanImg);
-        window.location.href = "game.html";  // الانتقال إلى صفحة اللعبة
-      } else {
-        alert("يرجى إدخال رابط صور المجرم والشرطي.");
-      }
-    });
-  </script>
+    <!-- شاشة اللعبة -->
+    <div id="game-screen" class="hidden">
+      <canvas id="game-canvas"></canvas>
+      <button id="restart-game-btn" class="hidden">إعادة تشغيل</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
