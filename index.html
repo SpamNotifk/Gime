@@ -4,63 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لعبة المطاردة</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            color: #333;
+        }
+        .form-container {
+            margin-top: 20px;
+        }
+        input[type="text"], button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>لعبة المطاردة</h1>
-        <div class="upload-section">
-            <label for="criminal-img">رابط صورة المجرم:</label>
-            <input type="text" id="criminal-img" placeholder="أدخل رابط الصورة هنا">
-            
-            <label for="policeman-img">رابط صورة الشرطي:</label>
-            <input type="text" id="policeman-img" placeholder="أدخل رابط الصورة هنا">
-            
-            <button id="add-images">إضافة الصور</button>
-        </div>
-
-        <div class="actions">
-            <button id="view-criminals">عرض شخصيات المجرم</button>
-            <button id="view-policemen">عرض شخصيات الشرطي</button>
-            <button id="start-game">بدء اللعبة</button>
-        </div>
+    <h1>مرحبًا بك في لعبة المطاردة</h1>
+    <div class="form-container">
+        <h2>إضافة صور الشخصيات</h2>
+        <form id="character-form">
+            <label for="criminal">رابط صورة المجرم:</label>
+            <input type="text" id="criminal" placeholder="أدخل رابط الصورة" required><br>
+            <label for="policeman">رابط صورة الشرطي:</label>
+            <input type="text" id="policeman" placeholder="أدخل رابط الصورة" required><br>
+            <button type="submit">حفظ الصور</button>
+        </form>
     </div>
+    <button onclick="startGame()">بدء اللعبة</button>
 
     <script>
-        document.getElementById("add-images").addEventListener("click", () => {
-            const criminalImg = document.getElementById("criminal-img").value;
-            const policemanImg = document.getElementById("policeman-img").value;
-
-            if (criminalImg && policemanImg) {
-                localStorage.setItem("criminalImg", criminalImg);
-                localStorage.setItem("policemanImg", policemanImg);
-                alert("تم إضافة الصور بنجاح!");
-            } else {
-                alert("يرجى إدخال روابط الصور لكل من المجرم والشرطي.");
-            }
+        // حفظ روابط الصور في التخزين المحلي
+        document.getElementById("character-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const criminalImg = document.getElementById("criminal").value;
+            const policemanImg = document.getElementById("policeman").value;
+            localStorage.setItem("criminalImg", criminalImg);
+            localStorage.setItem("policemanImg", policemanImg);
+            alert("تم حفظ الصور بنجاح!");
         });
 
-        document.getElementById("view-criminals").addEventListener("click", () => {
-            const criminalImg = localStorage.getItem("criminalImg");
-            if (criminalImg) {
-                window.open(criminalImg, "_blank");
-            } else {
-                alert("لم يتم إضافة شخصية المجرم بعد.");
-            }
-        });
-
-        document.getElementById("view-policemen").addEventListener("click", () => {
-            const policemanImg = localStorage.getItem("policemanImg");
-            if (policemanImg) {
-                window.open(policemanImg, "_blank");
-            } else {
-                alert("لم يتم إضافة شخصية الشرطي بعد.");
-            }
-        });
-
-        document.getElementById("start-game").addEventListener("click", () => {
+        // بدء اللعبة
+        function startGame() {
             window.location.href = "game.html";
-        });
+        }
     </script>
 </body>
 </html>
