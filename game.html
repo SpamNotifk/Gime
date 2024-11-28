@@ -1,121 +1,131 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة المطاردة</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #ccc; /* لون خلفية محايد */
-        }
-        #gameArea {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            background-color: white;
-            overflow: hidden;
-        }
-        .character {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-size: cover;
-            background-position: center;
-        }
-        #criminal {
-            background-color: black; /* اللون الافتراضي */
-        }
-        #policeman {
-            background-color: blue; /* اللون الافتراضي */
-        }
-        .obstacle {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            background-size: cover;
-            background-position: center;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لعبة المطاردة</title>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f0f0f0;
+    }
+    .game-area {
+      width: 100%;
+      height: 80vh;
+      background-image: url('https://thef2l-51c302fdbd2c.herokuapp.com/dl/6748a956f9729cc228605557'); /* صورة العوائق */
+      background-size: cover;
+      position: relative;
+      overflow: hidden;
+      border: 2px solid #000;
+    }
+    .character {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    .obstacle {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background-image: url('https://thef2l-51c302fdbd2c.herokuapp.com/dl/6748a956f9729cc228605557'); /* صورة العوائق */
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  </style>
 </head>
 <body>
-    <div id="gameArea">
-        <div id="criminal" class="character"></div>
-        <div id="policeman" class="character"></div>
-    </div>
-    <script>
-        const gameArea = document.getElementById("gameArea");
-        const criminal = document.getElementById("criminal");
-        const policeman = document.getElementById("policeman");
+  <div class="game-area" id="gameArea">
+    <div id="criminal" class="character"></div>
+    <div id="policeman" class="character"></div>
+  </div>
 
-        // إعداد الصور
-        const criminalImg = localStorage.getItem("criminalImg");
-        const policemanImg = localStorage.getItem("policemanImg");
-        if (criminalImg) criminal.style.backgroundImage = `url(${criminalImg})`;
-        if (policemanImg) policeman.style.backgroundImage = `url(${policemanImg})`;
+  <script>
+    const criminal = document.getElementById("criminal");
+    const policeman = document.getElementById("policeman");
+    const gameArea = document.getElementById("gameArea");
 
-        // المواقع الأولية
-        let criminalPos = { x: 100, y: 100 };
-        let policemanPos = { x: 300, y: 300 };
+    // جلب صور المجرم والشرطي من التخزين المحلي
+    criminal.src = localStorage.getItem("criminalImg") || "";
+    policeman.src = localStorage.getItem("policemanImg") || "";
 
-        // إضافة العوائق
-        const obstacleImg = "https://thef2l-51c302fdbd2c.herokuapp.com/dl/6748a956f9729cc228605557";
-        for (let i = 0; i < 5; i++) {
-            const obstacle = document.createElement("div");
-            obstacle.className = "obstacle";
-            obstacle.style.backgroundImage = `url(${obstacleImg})`;
-            obstacle.style.left = `${Math.random() * window.innerWidth}px`;
-            obstacle.style.top = `${Math.random() * window.innerHeight}px`;
-            gameArea.appendChild(obstacle);
+    // إعداد المواقع الأولية
+    let criminalPos = { x: 100, y: 100 }; // موقع المجرم
+    let policemanPos = { x: 300, y: 300 }; // موقع الشرطي
+    let obstacles = []; // العوائق
+
+    // إضافة العوائق عشوائياً
+    for (let i = 0; i < 5; i++) {
+      let obstacle = document.createElement("div");
+      obstacle.classList.add("obstacle");
+      obstacle.style.top = `${Math.random() * (gameArea.offsetHeight - 40)}px`;
+      obstacle.style.left = `${Math.random() * (gameArea.offsetWidth - 40)}px`;
+      gameArea.appendChild(obstacle);
+      obstacles.push(obstacle);
+    }
+
+    // تحريك المجرم بواسطة اللمس
+    let touchStartPos = null;
+
+    gameArea.addEventListener("touchstart", (e) => {
+      touchStartPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    });
+
+    gameArea.addEventListener("touchmove", (e) => {
+      if (touchStartPos) {
+        const deltaX = e.touches[0].clientX - touchStartPos.x;
+        const deltaY = e.touches[0].clientY - touchStartPos.y;
+        criminalPos.x += deltaX;
+        criminalPos.y += deltaY;
+        touchStartPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        updatePositions();
+      }
+    });
+
+    // تحريك الشرطي تلقائياً
+    setInterval(() => {
+      // تحريك الشرطي باتجاه المجرم
+      if (criminalPos.x > policemanPos.x) policemanPos.x += 3;
+      if (criminalPos.x < policemanPos.x) policemanPos.x -= 3;
+
+      if (criminalPos.y > policemanPos.y) policemanPos.y += 3;
+      if (criminalPos.y < policemanPos.y) policemanPos.y -= 3;
+
+      updatePositions();
+      checkCollision();
+    }, 100);
+
+    // تحديث مواقع الشخصيات في واجهة اللعبة
+    function updatePositions() {
+      criminal.style.transform = `translate(${criminalPos.x}px, ${criminalPos.y}px)`;
+      policeman.style.transform = `translate(${policemanPos.x}px, ${policemanPos.y}px)`;
+    }
+
+    // التحقق من التصادم مع العوائق
+    function checkCollision() {
+      const criminalRect = criminal.getBoundingClientRect();
+
+      obstacles.forEach((obstacle) => {
+        const obstacleRect = obstacle.getBoundingClientRect();
+
+        if (
+          criminalRect.x < obstacleRect.x + obstacleRect.width &&
+          criminalRect.x + criminalRect.width > obstacleRect.x &&
+          criminalRect.y < obstacleRect.y + obstacleRect.height &&
+          criminalRect.y + criminalRect.height > obstacleRect.y
+        ) {
+          alert("تم القبض عليك! لقد خسرت.");
+          window.location.href = "index.html";  // العودة إلى الصفحة الرئيسية
         }
-
-        // تحريك المجرم
-        document.addEventListener("keydown", (e) => {
-            switch (e.key) {
-                case "ArrowUp": criminalPos.y -= 10; break;
-                case "ArrowDown": criminalPos.y += 10; break;
-                case "ArrowLeft": criminalPos.x -= 10; break;
-                case "ArrowRight": criminalPos.x += 10; break;
-            }
-            updatePositions();
-        });
-
-        // حركة الشرطي
-        setInterval(() => {
-            if (criminalPos.x > policemanPos.x) policemanPos.x += 5;
-            if (criminalPos.x < policemanPos.x) policemanPos.x -= 5;
-            if (criminalPos.y > policemanPos.y) policemanPos.y += 5;
-            if (criminalPos.y < policemanPos.y) policemanPos.y -= 5;
-            updatePositions();
-            checkCollision();
-        }, 100);
-
-        // تحديث المواقع
-        function updatePositions() {
-            criminal.style.transform = `translate(${criminalPos.x}px, ${criminalPos.y}px)`;
-            policeman.style.transform = `translate(${policemanPos.x}px, ${policemanPos.y}px)`;
-        }
-
-        // التحقق من التصادم
-        function checkCollision() {
-            const obstacles = document.querySelectorAll(".obstacle");
-            const criminalRect = criminal.getBoundingClientRect();
-            obstacles.forEach((obstacle) => {
-                const obstacleRect = obstacle.getBoundingClientRect();
-                if (
-                    criminalRect.x < obstacleRect.x + obstacleRect.width &&
-                    criminalRect.x + criminalRect.width > obstacleRect.x &&
-                    criminalRect.y < obstacleRect.y + obstacleRect.height &&
-                    criminalRect.y + criminalRect.height > obstacleRect.y
-                ) {
-                    alert("تم القبض عليك!");
-                    window.location.href = "index.html";
-                }
-            });
-        }
-    </script>
+      });
+    }
+  </script>
 </body>
 </html>
