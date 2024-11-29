@@ -1,5 +1,5 @@
 // script.js
-const player = document.getElementById("IMG_4213");
+const player = document.getElementById("IMG_4217");
 const obstacle = document.getElementById("obstacle");
 const startBtn = document.getElementById("start-btn");
 const scoreDisplay = document.getElementById("score");
