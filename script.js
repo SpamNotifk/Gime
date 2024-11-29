@@ -9,11 +9,14 @@ let score = 0;
 let speed = 2000; // السرعة الابتدائية
 
 // التحكم في القفز
-document.addEventListener("click", () => {
+document.addEventListener("click", handleJump); // دعم النقر للفأرة
+document.addEventListener("touchstart", handleJump); // دعم اللمس للأجهزة المحمولة
+
+function handleJump() {
   if (!isJumping) {
     jump();
   }
-});
+}
 
 function jump() {
   isJumping = true;
