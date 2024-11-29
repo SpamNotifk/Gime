@@ -1,5 +1,5 @@
 // script.js
-const player = document.getElementById("IMG_4217");
+const player = document.getElementById("player");
 const obstacle = document.getElementById("obstacle");
 const startBtn = document.getElementById("start-btn");
 const scoreDisplay = document.getElementById("score");
@@ -8,10 +8,13 @@ let isJumping = false;
 let score = 0;
 let speed = 2000; // السرعة الابتدائية
 
-// التحكم في القفز
-document.addEventListener("click", handleJump); // دعم النقر للفأرة
-document.addEventListener("touchstart", handleJump); // دعم اللمس للأجهزة المحمولة
+// إضافة الأحداث للنقر أو اللمس
+function setupJumpEvents() {
+  document.addEventListener("click", handleJump); // لأجهزة الكمبيوتر
+  document.addEventListener("touchstart", handleJump); // لأجهزة اللمس
+}
 
+// وظيفة القفز
 function handleJump() {
   if (!isJumping) {
     jump();
@@ -79,6 +82,7 @@ startBtn.addEventListener("click", () => {
   startBtn.style.display = "none";
   obstacle.style.display = "block";
   obstacle.style.animationDuration = `${speed / 1000}s`; // تعيين مدة الحركة
+  setupJumpEvents(); // تفعيل أحداث القفز
   startCollisionCheck();
   increaseSpeed();
   increaseScore();
